@@ -18,7 +18,7 @@ export interface IHomeMovieData {
 
 class MovieService {
     private static _BASE_URL = 'https://api.themoviedb.org/3';
-    private static _BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/original';
+    private static _BASE_IMAGE_URL = 'https://image.tmdb.org/t/p/';
     private static _API_KEY = process.env.NEXT_PUBLIC_MOVIE_API;
 
     private static async getTrending(): Promise<IMovieApiResults> {
@@ -91,7 +91,11 @@ class MovieService {
     }
 
     public static imageUrl(movie: IMovie): string {
-        return `${this._BASE_IMAGE_URL}${movie.backdrop_path || movie.poster_path}`
+        return `${this._BASE_IMAGE_URL}original${movie.backdrop_path || movie.poster_path}`
+    }
+
+    public static imageThumbnailUrl(movie: IMovie): string {
+        return `${this._BASE_IMAGE_URL}w500${movie.backdrop_path || movie.poster_path}`
     }
 }
 export default MovieService;
