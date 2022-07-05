@@ -53,6 +53,10 @@ class MovieService {
         return (await axios.get<IMovieApiResults>(`${this._BASE_URL}/discover/movie?api_key=${this._API_KEY}&language=en-US&with_genres=99`)).data;
     }
 
+    public static async getMovieById(id: number): Promise<IMovie> {
+        return (await axios.get<IMovie>(`${this._BASE_URL}/movie/${id}?api_key=${this._API_KEY}&language=en-US`)).data
+    }
+
     public static async getHomeMovieData(): Promise<IHomeMovieData> {
         try {
             const [
@@ -85,6 +89,25 @@ class MovieService {
                 romanceMovies: romanceMovies.results,
                 documentaries: documentaries.results,
             }
+        } catch(err) {
+            throw err;
+        }
+    }
+
+    public static async getAllMovieIds(): Promise<number[]> {
+        try {
+            const homeMovieData = await this.getHomeMovieData();
+
+            const ids: number[] = [];
+            Object.values(homeMovieData).forEach((movies: IMovie[]) => {
+                movies.forEach((movie: IMovie) => {
+                    if (movie.id) {
+                        ids.push(movie.id);
+                    }
+                })
+            })
+
+            return ids;
         } catch(err) {
             throw err;
         }
